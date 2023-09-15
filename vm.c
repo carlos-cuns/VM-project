@@ -74,6 +74,8 @@ int main(int argc, char **argv)
     sp = start;
     bp = sp + 1;
     IR.op = 0, IR.m = 0, IR.l = 0;
+    printf("\t\t    PC  BP  SP  stack\n");
+    printf("Initial values:     %d   %d  %d\n", pc, bp, sp);
 
     while (halt == 1)
     {
@@ -262,7 +264,12 @@ int main(int argc, char **argv)
             break;
         }
         // printf("OP = %d ", IR.op);
-        printf("%d ", IR.l);
-        printf("%d\n", IR.m);
+        printf("%-2d %-2d   %-2d  %-2d  %-2d  ", IR.l, IR.m, pc, bp, sp);
+        int i;
+        for (i = (start + 1); i < (sp + 1); i++)
+        {
+            printf("%-2d ", pas[i]);
+        }
+        printf("\n");
     }
 }
