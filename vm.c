@@ -31,9 +31,9 @@ int base(int BP, int L)
     return arb;
 }
 
+// read the input file and store each integer into the pas array
 void readELF(char *filename)
 {
-    printf("Reading file\n");
     int buffer = 0;
     int i = 0;
     FILE *file = fopen(filename, "r");
@@ -42,9 +42,11 @@ void readELF(char *filename)
         pas[i] = buffer;
         i++;
     }
+    // store the last index of the text
     start = i - 1;
 }
 
+// helper function to print inputs
 void printText()
 {
     printf("Printing file\n");
@@ -56,6 +58,7 @@ void printText()
 
 int main(int argc, char **argv)
 {
+    // make sure the cmd line prompt is valid
     if (argc < 2)
     {
         printf("Include a file name\n");
@@ -65,9 +68,8 @@ int main(int argc, char **argv)
     int halt = 1;
     strcpy(filename, argv[1]);
     readELF(filename);
-    // printText();
 
-    // printf("Start index: %d\n", start);
+    // initialize starting values
     pc = 0;
     sp = start;
     bp = sp + 1;
@@ -75,10 +77,14 @@ int main(int argc, char **argv)
 
     while (halt == 1)
     {
+        // store each instruction into IR
         IR.op = pas[pc];
         IR.l = pas[pc + 1];
         IR.m = pas[pc + 2];
+        // increment by three to get to next instruction
+        pc += 3;
 
+        // each operation's logic is implemented parallel to the provided instructions
         switch (IR.op)
         {
         case 1:
@@ -154,7 +160,7 @@ int main(int argc, char **argv)
             sp += IR.m;
             break;
         case 7:
-            pc = IR.m - 3;
+            pc = IR.m;
             break;
         case 8:
             if (pas[sp] == 0)
@@ -183,6 +189,7 @@ int main(int argc, char **argv)
             printf("Not a valid ISA\n");
             return 1;
         }
+        // figure out which mnemonic to print based on opcode
         printf("\t");
         switch (IR.op)
         {
@@ -190,6 +197,7 @@ int main(int argc, char **argv)
             printf("LIT ");
             break;
         case 2:
+            // figure out which operation is being done
             switch (IR.m)
             {
             case 0:
@@ -256,6 +264,5 @@ int main(int argc, char **argv)
         // printf("OP = %d ", IR.op);
         printf("%d ", IR.l);
         printf("%d\n", IR.m);
-        pc += 3;
     }
 }
