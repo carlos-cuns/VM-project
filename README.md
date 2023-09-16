@@ -1,1 +1,0 @@
-Carlos Cuns, Wilson Gil
