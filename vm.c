@@ -79,6 +79,7 @@ int main(int argc, char **argv)
 
     while (halt == 1)
     {
+        // fetch
         // store each instruction into IR
         IR.op = pas[pc];
         IR.l = pas[pc + 1];
@@ -86,108 +87,109 @@ int main(int argc, char **argv)
         // increment by three to get to next instruction
         pc += 3;
 
+        // execute
         // each operation's logic is implemented parallel to the provided instructions
         switch (IR.op)
         {
-        case 1:
+        case 1: // LIT
             sp++;
             pas[sp] = IR.m;
             break;
-        case 2:
+        case 2: // OPR
             switch (IR.m)
             {
-            case 0:
+            case 0: // RTN
                 sp = bp - 1;
                 bp = pas[sp + 2];
                 pc = pas[sp + 3];
                 break;
-            case 1:
+            case 1: // ADD
                 pas[sp - 1] = pas[sp - 1] + pas[sp];
                 sp--;
                 break;
-            case 2:
+            case 2: // SUB
                 pas[sp - 1] = pas[sp - 1] - pas[sp];
                 sp--;
                 break;
-            case 3:
+            case 3: // MUL
                 pas[sp - 1] = pas[sp - 1] * pas[sp];
                 sp--;
                 break;
-            case 4:
+            case 4: // DIV
                 pas[sp - 1] = pas[sp - 1] / pas[sp];
                 sp--;
                 break;
-            case 5:
+            case 5: // EQL
                 pas[sp - 1] = pas[sp - 1] == pas[sp];
                 sp--;
                 break;
-            case 6:
+            case 6: // NEQ
                 pas[sp - 1] = pas[sp - 1] != pas[sp];
                 sp--;
                 break;
-            case 7:
+            case 7: // LSS
                 pas[sp - 1] = pas[sp - 1] < pas[sp];
                 sp--;
                 break;
-            case 8:
+            case 8: // LEQ
                 pas[sp - 1] = pas[sp - 1] <= pas[sp];
                 sp--;
                 break;
-            case 9:
+            case 9: // GTR
                 pas[sp - 1] = pas[sp - 1] > pas[sp];
                 sp--;
                 break;
-            case 10:
+            case 10: // GEQ
                 pas[sp - 1] = pas[sp - 1] >= pas[sp];
                 sp--;
                 break;
             }
             break;
-        case 3:
+        case 3: // LOD
             sp++;
             pas[sp] = pas[base(bp, IR.l) + IR.m];
             break;
-        case 4:
+        case 4: // STO
             pas[base(bp, IR.l) + IR.m] = pas[sp];
             sp--;
             break;
-        case 5:
+        case 5: // CAL
             pas[sp + 1] = base(bp, IR.l);
             pas[sp + 2] = bp;
             pas[sp + 3] = pc;
             bp = sp + 1;
             pc = IR.m;
             break;
-        case 6:
+        case 6: // INC
             sp += IR.m;
             break;
-        case 7:
+        case 7: // JMP
             pc = IR.m;
             break;
-        case 8:
+        case 8: // JPC
             if (pas[sp] == 0)
                 pc = IR.m;
             sp--;
             break;
-        case 9:
+        case 9: // SYS
             switch (IR.m)
             {
-            case 1:
+            case 1: // WRITE
                 printf("Output result is: ");
                 printf("%d\n", pas[sp]);
                 sp--;
                 break;
-            case 2:
+            case 2: // READ
                 printf("Please Enter an Integer: ");
                 sp++;
                 scanf("%d", &pas[sp]);
                 break;
-            case 3:
+            case 3: // END
                 halt = 0;
                 break;
             }
             break;
-        default:
+        default: // "ERROR"
             printf("Not a valid ISA\n");
             return 1;
         }
