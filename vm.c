@@ -1,4 +1,5 @@
 // Carlos Cuns, Wilson Gil
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -37,6 +38,11 @@ void readELF(char *filename)
     int buffer = 0;
     int i = 0;
     FILE *file = fopen(filename, "r");
+    if (!file)
+    {
+        printf("failed to open file");
+        exit(1);
+    }
     while (fscanf(file, "%d", &buffer) != EOF)
     {
         pas[i] = buffer;
@@ -44,6 +50,7 @@ void readELF(char *filename)
     }
     // store the last index of the text
     start = i - 1;
+    fclose(file);
 }
 
 // helper function to print inputs
@@ -62,7 +69,7 @@ int main(int argc, char **argv)
     if (argc < 2)
     {
         printf("Include a file name\n");
-        return 1;
+        exit(1);
     }
     char filename[MAX_SIZE];
     int halt = 1;
