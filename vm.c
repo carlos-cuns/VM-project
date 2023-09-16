@@ -278,6 +278,10 @@ int main(int argc, char **argv)
         for (i = (start + 1); i < (sp + 1); i++)
         {
             printf("%-2d ", pas[i]);
+            if (i == bp)
+            {
+                printf("| ");
+            }
         }
         printf("\n");
     }
