@@ -277,7 +277,7 @@ int main(int argc, char **argv)
         int i;
         for (i = (start + 1); i < (sp + 1); i++)
         {
-            if (i == bp && bp != 0)
+            if (i == bp && bp != (start + 1))
             {
                 printf("| ");
             }
