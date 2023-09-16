@@ -277,11 +277,11 @@ int main(int argc, char **argv)
         int i;
         for (i = (start + 1); i < (sp + 1); i++)
         {
-            printf("%-2d ", pas[i]);
-            if (i == bp)
+            if (i == bp && bp != 0)
             {
                 printf("| ");
             }
+            printf("%-2d ", pas[i]);
         }
         printf("\n");
     }
